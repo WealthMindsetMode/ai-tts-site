@@ -1,10 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Text to Speech</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8422918909080146"
+     crossorigin="anonymous"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -53,6 +54,16 @@
       color: red;
       margin-top: 1rem;
     }
+    footer {
+      margin-top: 4rem;
+      font-size: 0.9rem;
+      color: #555;
+      text-align: center;
+    }
+    footer a {
+      color: #0073e6;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
@@ -70,9 +81,11 @@
   <audio id="audioPlayer" controls></audio>
   <a id="downloadBtn" href="#" download="speech.mp3">Download Audio</a>
   <div id="errorLog"></div>
-  <div class="ads-placeholder">
-    <!-- AdSense script will be added here -->
-  </div>
+
+  <footer>
+    <p>This free tool uses Google Cloud Text-to-Speech and may store usage logs temporarily for performance. We do not collect personal data. All rights reserved.</p>
+    <p><a href="#">Privacy Policy</a> | <a href="#">Disclaimer</a></p>
+  </footer>
 
   <script>
     async function convertTextToSpeech() {
@@ -89,15 +102,12 @@
         return;
       }
 
-      
-
       try {
         const response = await fetch('/api/tts', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ text, voiceName })
-});      
-          
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text, voiceName })
+        });
 
         const data = await response.json();
         if (data.audioContent) {
