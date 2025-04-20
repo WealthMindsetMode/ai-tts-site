@@ -10,7 +10,8 @@ export default async function handler(req, res) {
   }
 
   const apiKey = process.env.GOOGLE_API_KEY;
-
+  console.log("GOOGLE_API_KEY:", apiKey);
+  
   try {
     const response = await fetch(`https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`, {
       method: 'POST',
