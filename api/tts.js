@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing text or voiceName' });
   }
 
-  const apiKey = process.env.GOOGLE_API_KEY;  
+  const apiKey = process.env.TTS_API_KEY;  
   console.log("GOOGLE_API_KEY:", apiKey);
   
   try {
