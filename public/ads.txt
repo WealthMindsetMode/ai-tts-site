@@ -1,0 +1,28 @@
+google.com, pub-8422918909080146, DIRECT, f08c47fec0942fa0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Added ads.txt for AdSense verification
