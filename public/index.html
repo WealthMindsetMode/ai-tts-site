@@ -1,29 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Text to Speech</title>
-
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="Free AI Text-to-Speech converter. Turn any text into audio instantly and download. No login or signup required.">
-  <meta name="keywords" content="text to speech, AI voice, convert text to audio, free TTS online, realistic speech generator">
-
-  <!-- Google AdSense (if applicable) -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8422918099080146" crossorigin="anonymous"></script>
-
+  <meta name="description" content="Easily convert your text into realistic speech using this free online AI-powered Text-to-Speech tool. No login required. Choose your preferred voice and download your audio instantly." />
+  <meta name="keywords" content="AI Text to Speech, text to audio, free TTS, realistic speech online" />
+  <title>AI Text to Speech Converter</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f5f5f5;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      text-align: center;
       padding: 2rem;
-    }
-    h1 {
-      color: #333;
-      font-size: 2rem;
     }
     textarea {
       width: 100%;
@@ -31,81 +18,76 @@
       height: 150px;
       padding: 1rem;
       margin-bottom: 1rem;
-      border-radius: 8px;
       border: 2px solid #ccc;
+      border-radius: 8px;
       font-size: 1rem;
-    }
-    p {
-      text-align: center;
-      max-width: 600px;
-      margin: 1rem auto;
-      font-size: 1rem;
-      color: #333;
     }
     select, button {
-      padding: 0.5rem 1rem;
       margin: 0.5rem;
+      padding: 0.5rem 1rem;
       font-size: 1rem;
       border-radius: 5px;
     }
-    audio {
-      margin: 1rem 0;
+    #audioPlayer {
+      margin-top: 1rem;
     }
-    .footer {
+    footer {
       margin-top: 2rem;
       font-size: 0.85rem;
-      text-align: center;
-      color: #555;
+      color: #777;
     }
   </style>
 </head>
 <body>
   <h1>AI Text to Speech Converter</h1>
-
-  <p>
-    Easily convert your text into realistic speech using this free online AI-powered Text-to-Speech tool.
-    No login required. Choose your preferred voice and download your audio instantly.
-  </p>
-
-  <textarea id="text" placeholder="Enter your text here..."></textarea>
-  <div>
-    <select id="voice">
-      <option value="en-US-Wavenet-D">English (US) - Male</option>
-      <option value="en-US-Wavenet-F">English (US) - Female</option>
-    </select>
-    <button onclick="convertText()">Convert to Audio</button>
-  </div>
-
-  <audio id="player" controls></audio>
-  <div><a id="downloadLink" href="#" download="tts-audio.mp3">Download Audio</a></div>
-
-  <div class="footer">
-    This free tool uses Google Cloud Text-to-Speech and may store usage logs temporarily for performance.
-    We do not collect personal data. All rights reserved.
-    <br />
-    <a href="#">Privacy Policy</a> | <a href="#">Disclaimer</a>
-  </div>
-
-  <script>
+  <p>Easily convert your text into realistic speech using this free online AI-powered Text-to-Speech tool. No login required. Choose your preferred voice and download your audio instantly.</p>
+  <textarea id="text" placeholder="Enter your text here..."></textarea><br>
+  <select id="voice">
+    <option value="en-US-Wavenet-D">English (US) - Male</option>
+    <option value="en-US-Wavenet-C">English (US) - Female</option>
+  </select>
+  <button onclick="convertText()">Convert to Audio</button>
+  <div id="audioPlayer"></div>
+  <footer>
+    <p><a id="downloadLink" href="#" style="display:none;">Download Audio</a></p>
+    <p>This free tool uses Google Cloud Text-to-Speech and may store usage logs temporarily for performance. We do not collect personal data. All rights reserved.</p>
+    <p><a href="#">Privacy Policy</a> | <a href="#">Disclaimer</a></p>
+  </footer>  <script>
     async function convertText() {
       const text = document.getElementById("text").value;
-      const voice = document.getElementById("voice").value;
+      const voiceName = document.getElementById("voice").value;
+      const audioPlayer = document.getElementById("audioPlayer");
+      const downloadLink = document.getElementById("downloadLink");
 
-      const res = await fetch('/api/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, voiceName: voice })      
+      audioPlayer.innerHTML = '';
+      downloadLink.style.display = 'none';
 
-      const data = await res.json();
-      if (data.audioUrl) {
-        const player = document.getElementById("player");
-        const downloadLink = document.getElementById("downloadLink");
-        player.src = data.audioUrl;
-        downloadLink.href = data.audioUrl;
-      } else {
-        alert("Failed to convert text. Please try again.");
+      try {
+        const response = await fetch('/api/tts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ text, voiceName }),
+        });
+
+        const data = await response.json();
+
+        if (data.audioContent) {
+          const audio = new Audio("data:audio/mp3;base64," + data.audioContent);
+          audio.controls = true;
+          audioPlayer.appendChild(audio);
+
+          downloadLink.href = "data:audio/mp3;base64," + data.audioContent;
+          downloadLink.download = "tts-audio.mp3";
+          downloadLink.style.display = 'inline-block';
+        } else {
+          alert("Failed to convert text. Please try again.");
+        }
+      } catch (error) {
+        alert("An error occurred. Try again.");
+        console.error(error);
       }
     }
-  </script>
-</body>
+  </script></body>
 </html>
